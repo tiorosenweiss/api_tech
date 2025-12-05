@@ -46,22 +46,22 @@ O diagrama abaixo ilustra o fluxo de processamento de um pedido, desde a requisi
 
 ```mermaid
 graph TD
-    Client([Client / External System]) -->|POST /api/pedidos| Controller[PedidoController]
+    Client([Client / External System]) -->|"POST /api/pedidos"| Controller[PedidoController]
     
     subgraph "Application Core"
-        Controller -->|@Valid| DTO[PedidoInputDTO]
+        Controller -->|"@Valid"| DTO[PedidoInputDTO]
         DTO -- "Validates Data" --> Controller
-        Controller -->|Success| Service[PedidoService]
+        Controller -->|"Success"| Service[PedidoService]
         
-        Service -->|Check Duplicate| Repository[PedidoRepository]
-        Repository -->|Query| DB[(H2 Database)]
+        Service -->|"Check Duplicate"| Repository[PedidoRepository]
+        Repository -->|"Query"| DB[(H2 Database)]
         
-        Service -->|Calculate Total| Logic(Business Logic)
-        Logic -->|Save| Repository
+        Service -->|"Calculate Total"| Logic(Business Logic)
+        Logic -->|"Save"| Repository
         
-        Service -.->|Record Metric| Micrometer[Micrometer / Actuator]
-        Service -.->|Log Info/Error| SLF4J[SLF4J Logging]
+        Service -.->|"Record Metric"| Micrometer[Micrometer / Actuator]
+        Service -.->|"Log Info/Error"| SLF4J[SLF4J Logging]
     end
     
-    Micrometer -->|Expose| PrometheusEndpoint([/actuator/prometheus])
-    SLF4J -->|Output| ConsoleLogs[Console / Logs]
+    Micrometer -->|"Expose"| PrometheusEndpoint([/actuator/prometheus])
+    SLF4J -->|"Output"| ConsoleLogs[Console / Logs]
