@@ -65,3 +65,71 @@ graph TD
     
     Micrometer -->|"Expose"| PrometheusEndpoint([/actuator/prometheus])
     SLF4J -->|"Output"| ConsoleLogs[Console / Logs]
+
+--
+## ⚙️ Como Executar o Projeto
+
+### Pré-requisitos
+* JDK 21 instalado.
+* Maven (ou IDE com suporte a Maven como VS Code ou IntelliJ).
+
+### Passos
+1. Clone este repositório ou baixe os arquivos.
+2. Abra o projeto na sua IDE de preferência.
+3. Aguarde o download das dependências do Maven.
+4. Execute a classe principal:
+   `br.com.testetech.testetech.TestetechApplication`
+
+A aplicação iniciará na porta **8080**.
+
+---
+
+## 🔌 API Endpoints
+
+### 1. Criar Novo Pedido (Recebimento)
+Recebe um pedido externo, valida os dados, calcula o valor total (considerando quantidade e valor unitário), registra métricas de negócio e armazena no banco de dados.
+
+* **Método:** `POST`
+* **URL:** `http://localhost:8080/api/pedidos`
+* **Content-Type:** `application/json`
+
+**Exemplo de Payload (JSON):**
+
+```json
+{
+  "codigoPedido": "PEDIDO-2025-001",
+  "items": [
+    {
+      "produtoId": "NOTEBOOK-PRO",
+      "valorUnitario": 5000.00,
+      "quantidade": 1
+    },
+    {
+      "produtoId": "MOUSE-USB",
+      "valorUnitario": 150.00,
+      "quantidade": 2
+    }
+  ]
+}
+
+**Resposta de Sucesso (201 Created):**
+```json
+{
+    "id": 1,
+    "codigoPedido": "PEDIDO-2025-001",
+    "items": [
+        {
+            "produtoId": "NOTEBOOK-PRO",
+            "valorUnitario": 5000.00,
+            "quantidade": 1
+        },
+        {
+            "produtoId": "MOUSE-USB",
+            "valorUnitario": 150.00,
+            "quantidade": 2
+        }
+    ],
+    "valorTotal": 5300.00,
+    "status": "CALCULADO",
+    "dataCriacao": "2025-12-05T10:00:00"
+}
