@@ -44,6 +44,8 @@ A aplicação foi projetada com foco em operabilidade ("Production-Ready"), expo
 
 O diagrama abaixo ilustra o fluxo de processamento de um pedido, desde a requisição até a persistência, destacando as camadas de validação e instrumentação de métricas.
 
+### Algo
+
 ```mermaid
 graph TD
     Client([Client / External System]) -->|"POST /api/pedidos"| Controller[PedidoController]
