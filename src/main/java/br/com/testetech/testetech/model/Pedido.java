@@ -20,7 +20,7 @@ import java.util.List;
 public class Pedido {
 
     /**
-     * Identificador técnico (Surrogate Key) gerado automaticamente pelo banco.
+     * Identificador técnico gerado automaticamente pelo banco.
      * Uso exclusivo para integridade referencial interna.
      */
     @Id

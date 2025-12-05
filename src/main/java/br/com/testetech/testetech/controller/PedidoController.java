@@ -3,6 +3,7 @@ package br.com.testetech.testetech.controller;
 import br.com.testetech.testetech.dto.PedidoInputDTO;
 import br.com.testetech.testetech.model.Pedido;
 import br.com.testetech.testetech.service.PedidoService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -34,7 +35,7 @@ public class PedidoController {
      * @return ResponseEntity contendo o pedido persistido e o status HTTP 201 (Created).
      */
     @PostMapping
-    public ResponseEntity<Pedido> criar(@RequestBody PedidoInputDTO dto) {
+    public ResponseEntity<Pedido> criar(@RequestBody @Valid PedidoInputDTO dto) {
         Pedido pedidoSalvo = service.registrarPedido(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoSalvo);
     }

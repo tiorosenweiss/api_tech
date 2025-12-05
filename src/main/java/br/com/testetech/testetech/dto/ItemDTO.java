@@ -1,5 +1,9 @@
 package br.com.testetech.testetech.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.math.BigDecimal;
 
 /**
@@ -9,19 +13,24 @@ import java.math.BigDecimal;
 public class ItemDTO {
 
     /**
-     * Identificador único ou SKU do produto (ex: "NOTEBOOK-DELL").
+     * Identificador único do produto (ex: "NOTEBOOK-DELL").
      */
+    @NotNull(message = "O ID do produto é obrigatório")
     private String produtoId;
 
     /**
      * Valor monetário unitário do produto.
      * Espera-se um valor positivo para cálculos.
      */
+    @NotNull(message = "O valor unitário é obrigatório")
+    @Positive(message = "O valor deve ser positivo")
     private BigDecimal valorUnitario;
 
     /**
      * Quantidade de itens solicitados.
      */
+    @NotNull(message = "A quantidade é obrigatória")
+    @Min(value = 1, message = "A quantidade deve ser pelo menos 1")
     private Integer quantidade;
 
     public ItemDTO(){}

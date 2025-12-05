@@ -1,5 +1,9 @@
 package br.com.testetech.testetech.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.List;
 
 /**
@@ -12,11 +16,14 @@ public class PedidoInputDTO {
      * Código identificador do pedido vindo do sistema externo.
      * Deve ser único no sistema para evitar duplicidade.
      */
+    @NotBlank(message = "O código do pedido não pode estar em branco")
     private String codigoPedido;
 
     /**
      * Lista de itens que compõem o pedido.
      */
+    @NotEmpty(message = "O pedido deve conter pelo menos um item")
+    @Valid
     private List<ItemDTO> items;
 
     public PedidoInputDTO() {}

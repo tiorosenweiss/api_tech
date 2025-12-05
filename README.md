@@ -7,6 +7,8 @@ Este projeto é um microsserviço desenvolvido para o gerenciamento, processamen
 * **Java 21 (LTS):** Versão mais recente e performática do Java.
 * **Spring Boot 3.4.0:** Framework base para agilidade e configuração.
 * **Spring Data JPA:** Para persistência e manipulação de dados.
+* **Spring Boot Actuator:** Para monitoramento (Health Check) e métricas operacionais.
+* **Micrometer:** Para instrumentação de métricas customizadas de negócio.
 * **H2 Database:** Banco de dados em memória (para facilidade de execução e testes).
 * **SpringDoc OpenAPI (Swagger):** Documentação automática e interativa da API.
 * **Maven:** Gerenciamento de dependências.
@@ -23,45 +25,43 @@ Lá você poderá visualizar todos os endpoints, modelos de dados (Schemas) e te
 
 ---
 
-## ⚙️ Como Executar o Projeto
+## 📊 Observabilidade e Monitoramento
 
-### Pré-requisitos
-* JDK 21 instalado.
-* Maven (ou IDE com suporte a Maven como VS Code ou IntelliJ).
+A aplicação foi projetada com foco em operabilidade ("Production-Ready"), expondo endpoints para monitoramento de saúde, métricas técnicas e de negócio, além de utilizar logs estruturados (SLF4J).
 
-### Passos
-1. Clone este repositório ou baixe os arquivos.
-2. Abra o projeto na sua IDE de preferência.
-3. Aguarde o download das dependências do Maven.
-4. Execute a classe principal:
-   `br.com.testetech.testetech.TestetechApplication`
+### Endpoints de Gerenciamento (Actuator)
 
-A aplicação iniciará na porta **8080**.
+| Recurso | Método | URL | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Health Check** | `GET` | [`/actuator/health`](http://localhost:8080/actuator/health) | Monitora o status da API e a conectividade com o banco de dados. |
+| **Métricas JVM** | `GET` | [`/actuator/metrics`](http://localhost:8080/actuator/metrics) | Dados técnicos (Uso de CPU, Memória Heap, Threads, GC). |
+| **Métrica de Negócio** | `GET` | [`/actuator/metrics/pedidos.processados`](http://localhost:8080/actuator/metrics/pedidos.processados) | **Contador Customizado**: Monitora em tempo real o volume de pedidos processados com sucesso. |
+| **Info da App** | `GET` | [`/actuator/info`](http://localhost:8080/actuator/info) | Informações de build e versão da aplicação. |
 
 ---
 
-## 🔌 API Endpoints
+## 🏗️ Arquitetura do Projeto
 
-### 1. Criar Novo Pedido (Recebimento)
-Recebe um pedido externo, calcula o valor total (considerando quantidade e valor unitário) e armazena no banco de dados.
+O diagrama abaixo ilustra o fluxo de processamento de um pedido, desde a requisição até a persistência, destacando as camadas de validação e instrumentação de métricas.
 
-* **Método:** `POST`
-* **URL:** `http://localhost:8080/api/pedidos`
-* **Body (JSON Exemplo):**
-
-```json
-{
-  "codigoPedido": "PEDIDO-2025-001",
-  "items": [
-    {
-      "produtoId": "NOTEBOOK-PRO",
-      "valorUnitario": 5000.00,
-      "quantidade": 1
-    },
-    {
-      "produtoId": "MOUSE-USB",
-      "valorUnitario": 150.00,
-      "quantidade": 2
-    }
-  ]
-}
+```mermaid
+graph TD
+    Client([Client / External System]) -->|POST /api/pedidos| Controller[PedidoController]
+    
+    subgraph "Application Core"
+        Controller -->|@Valid| DTO[PedidoInputDTO]
+        DTO -- "Validates Data" --> Controller
+        Controller -->|Success| Service[PedidoService]
+        
+        Service -->|Check Duplicate| Repository[PedidoRepository]
+        Repository -->|Query| DB[(H2 Database)]
+        
+        Service -->|Calculate Total| Logic(Business Logic)
+        Logic -->|Save| Repository
+        
+        Service -.->|Record Metric| Micrometer[Micrometer / Actuator]
+        Service -.->|Log Info/Error| SLF4J[SLF4J Logging]
+    end
+    
+    Micrometer -->|Expose| PrometheusEndpoint([/actuator/prometheus])
+    SLF4J -->|Output| ConsoleLogs[Console / Logs]
