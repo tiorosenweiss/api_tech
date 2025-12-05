@@ -84,6 +84,27 @@ Recebe um pedido externo, valida os dados, calcula o valor total (considerando q
   ]
 }
 
+**Resposta de Sucesso (201 Created):**
+```json
+{
+    "id": 1,
+    "codigoPedido": "PEDIDO-2025-001",
+    "items": [
+        {
+            "produtoId": "NOTEBOOK-PRO",
+            "valorUnitario": 5000.00,
+            "quantidade": 1
+        },
+        {
+            "produtoId": "MOUSE-USB",
+            "valorUnitario": 150.00,
+            "quantidade": 2
+        }
+    ],
+    "valorTotal": 5300.00,
+    "status": "CALCULADO",
+    "dataCriacao": "2025-12-05T10:00:00"
+}
 
 ## 🏗️ Arquitetura do Projeto
 
