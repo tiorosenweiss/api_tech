@@ -39,12 +39,55 @@ A aplicação foi projetada com foco em operabilidade ("Production-Ready"), expo
 | **Info da App** | `GET` | [`/actuator/info`](http://localhost:8080/actuator/info) | Informações de build e versão da aplicação. |
 
 ---
+## ⚙️ Como Executar o Projeto
+
+### Pré-requisitos
+* JDK 21 instalado.
+* Maven (ou IDE com suporte a Maven como VS Code ou IntelliJ).
+
+### Passos
+1. Clone este repositório ou baixe os arquivos.
+2. Abra o projeto na sua IDE de preferência.
+3. Aguarde o download das dependências do Maven.
+4. Execute a classe principal:
+   `br.com.testetech.testetech.TestetechApplication`
+
+A aplicação iniciará na porta **8080**.
+
+---
+
+## 🔌 API Endpoints
+
+### 1. Criar Novo Pedido (Recebimento)
+Recebe um pedido externo, valida os dados, calcula o valor total (considerando quantidade e valor unitário), registra métricas de negócio e armazena no banco de dados.
+
+* **Método:** `POST`
+* **URL:** `http://localhost:8080/api/pedidos`
+* **Content-Type:** `application/json`
+
+**Exemplo de Payload (JSON):**
+
+```json
+{
+  "codigoPedido": "PEDIDO-2025-001",
+  "items": [
+    {
+      "produtoId": "NOTEBOOK-PRO",
+      "valorUnitario": 5000.00,
+      "quantidade": 1
+    },
+    {
+      "produtoId": "MOUSE-USB",
+      "valorUnitario": 150.00,
+      "quantidade": 2
+    }
+  ]
+}
+
 
 ## 🏗️ Arquitetura do Projeto
 
 O diagrama abaixo ilustra o fluxo de processamento de um pedido, desde a requisição até a persistência, destacando as camadas de validação e instrumentação de métricas.
-
-### Algo
 
 ```mermaid
 graph TD
