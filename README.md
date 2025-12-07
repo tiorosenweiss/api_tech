@@ -4,7 +4,7 @@ Este projeto é um microsserviço desenvolvido para o gerenciamento, processamen
 
 ## 🚀 Tecnologias Utilizadas
 
-* **Java 21 (LTS):** Versão mais recente e performática do Java.
+* **Java 21 (LTS):** Versão estável e performática do Java.
 * **Spring Boot 3.4.0:** Framework base para agilidade e configuração.
 * **Spring Data JPA:** Para persistência e manipulação de dados.
 * **Spring Boot Actuator:** Para monitoramento (Health Check) e métricas operacionais.
